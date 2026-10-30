@@ -31,6 +31,37 @@ On startup the app:
 - upgrades data written by older versions of the app
 - fills an **empty** catalogue with the 100 demo products in `demo_data/` (disable with `SEED_DEMO_DATA=false`)
 
+## Shopping assistant (chatbot)
+
+`chatbot/` is an AI shopping assistant that reads the same MongoDB catalogue. Shoppers can:
+
+- **type** a request ("men's shirts under 2000") — a pydantic-ai agent on Groq searches the catalogue
+- **speak** it — the recording is transcribed with Whisper and answered the same way
+- **share a photo** — a vision model tags the garment and colours, and the closest lookalikes are ranked by tags plus colour similarity
+
+Every result links to its product page in the store. Inputs and replies pass through guardrail models (prompt-injection and content-policy checks). Calls go through the Portkey gateway when configured, falling back to Groq directly.
+
+```bash
+cd chatbot
+python -m venv webchatbot                # or: uv venv webchatbot
+webchatbot\Scripts\activate
+pip install -r requirements.txt          # or: uv pip install -r requirements.txt
+copy .env.example .env                   # set MONGO_URI and GROQ_API_KEY
+python main.py                           # http://localhost:8001
+```
+
+### Run the store and the assistant together
+
+From the project root, with both environments set up:
+
+```bash
+python run_all.py
+```
+
+It starts the store (port 8000) and the assistant (port 8001) in their own environments, points the assistant's product links at the store's actual port, shows both logs in one window and opens both in the browser. Ctrl+C stops both.
+
+To run the assistant on its own, the store must also be running for product links to open; if it isn't on port 8000, set `STORE_URL` in `chatbot/.env`.
+
 ## Admin access
 
 Register on the site, then grant yourself admin rights from the project folder:
@@ -80,6 +111,7 @@ The suite runs against an in-memory MongoDB (mongomock), so it needs no database
 
 ```
 main.py                 app entry point, startup tasks, static frontend
+run_all.py              start the store and the shopping assistant together
 backend/
   auth.py, tokens.py    login tokens and the current-user / admin checks
   routes/               products, bulk import, cart, orders, auth, profile, Google sign-in
@@ -91,6 +123,7 @@ frontend/
   src/                  router, pages, components, API client (services/api/*)
 demo_data/              100 demo products: spreadsheet + images
 tests/                  pytest suite
+chatbot/                AI shopping assistant: text, voice and photo search (separate app)
 ```
 
 ## License
