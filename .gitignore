@@ -158,6 +158,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+fashionagent/
 
 # Spyder project settings
 .spyderproject
@@ -218,3 +219,6 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Vastra: locally generated token-signing key
+.secret_key
