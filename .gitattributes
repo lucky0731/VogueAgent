@@ -1,0 +1,7 @@
+# Normalise line endings in the repo so Windows and macOS/Linux diffs stay clean.
+* text=auto
+*.bat text eol=crlf
+*.png binary
+*.jpg binary
+*.zip binary
+*.xlsx binary

@@ -1,0 +1,25 @@
+# Runtime dependencies for Vastra. Pinned to the versions the app is tested
+# with (Python 3.10+). Upgrade deliberately: `pip install -U <pkg>`, run the
+# tests, then update the pin.
+
+# --- Web framework ---
+fastapi==0.162.0
+uvicorn==0.54.0
+python-multipart==0.0.32          # multipart/form-data uploads (product + avatar images)
+
+# --- Data, validation, config ---
+pydantic==2.14.1
+pydantic-settings==2.16.1
+python-dotenv==1.2.4              # loads .env
+
+# --- Database ---
+pymongo==4.19.0
+dnspython==2.9.0                  # needed for mongodb+srv:// connection strings
+
+# --- Authentication ---
+bcrypt==5.0.0                     # password hashing
+google-auth==2.62.0               # Google Sign-In: verifies the ID-token signature
+requests==2.34.2                  # HTTP transport used by google-auth
+
+# --- Spreadsheet ingestion ---
+openpyxl==3.1.5                   # bulk product upload (.xlsx workbook)
